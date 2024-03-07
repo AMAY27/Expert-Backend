@@ -12,7 +12,7 @@ async function bootstrap() {
   const nodeEnv = process.env.NODE_ENV || 'prod';
   const envFilePath = `.env.${nodeEnv}`;
   logger.log(
-    `Selected environment: ${nodeEnv} and Selected env file path: ${envFilePath}`,
+    `Selected environment: ${nodeEnv} and Selected env file path: ${envFilePath} ${process.env.MONGO_URI}`,
   );
 
   dotenv.config({ path: envFilePath });
