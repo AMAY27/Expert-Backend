@@ -21,7 +21,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const configService = app.get(ConfigService);
-  app.enableCors();
+  app.enableCors({
+    allowedHeaders: ['content-type'],
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api-docs', app, document);
