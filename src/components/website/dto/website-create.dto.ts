@@ -19,4 +19,11 @@ export class WebsiteCreateDto {
 
   @ApiProperty({ required: false })
   description: string;
+
+  @ApiProperty({required: true})
+  rimaryExpertId : string;
+
+  @ApiProperty({ required: false })
+  expertIds: string[];
+
 }
