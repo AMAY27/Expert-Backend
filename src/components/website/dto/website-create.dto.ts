@@ -21,7 +21,7 @@ export class WebsiteCreateDto {
   description: string;
 
   @ApiProperty({required: true})
-  rimaryExpertId : string;
+  primaryExpertId : string;
 
   @ApiProperty({ required: false })
   expertIds: string[];

@@ -34,7 +34,7 @@ export class WebsiteController {
 
   @Post()
   @UseGuards(AuthGuard)
-  @Roles(UserType.Client)
+  @Roles(UserType.Expert)
   @ApiOperation({
     summary: 'Create a new website [For Client]',
     description: 'Persist details of a new website for a user.',
