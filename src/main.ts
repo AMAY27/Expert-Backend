@@ -9,7 +9,7 @@ import * as process from 'process';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
-  const nodeEnv = process.env.NODE_ENV || 'prod';
+  const nodeEnv = process.env.NODE_ENV || '';
   const envFilePath = `.env.${nodeEnv}`;
   logger.log(
     `Selected environment: ${nodeEnv} and Selected env file path: ${envFilePath}`,
