@@ -37,4 +37,5 @@ lerna-debug.log*
 .env
 .env.sample
 .env.local
+.env.prod
 .vercel
