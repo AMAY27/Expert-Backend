@@ -9,13 +9,6 @@ import * as process from 'process';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
-  const nodeEnv = process.env.NODE_ENV || 'prod';
-  const envFilePath = `.env.${nodeEnv}`;
-  logger.log(
-    `Selected environment: ${nodeEnv} and Selected env file path: ${envFilePath}`,
-  );
-
-  dotenv.config({ path: envFilePath  });
 
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
@@ -26,6 +19,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api-docs', app, document);
 
-  await app.listen(process.env.PORT || configService.get<number>('APP_PORT'));
+  await app.listen(configService.get<number>('APP_PORT'));
 }
 bootstrap();
