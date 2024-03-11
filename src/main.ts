@@ -15,7 +15,7 @@ async function bootstrap() {
     `Selected environment: ${nodeEnv} and Selected env file path: ${envFilePath}`,
   );
 
-  dotenv.config();
+  dotenv.config({ path: envFilePath  });
 
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
