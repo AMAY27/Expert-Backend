@@ -9,6 +9,11 @@ import * as process from 'process';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
+  logger.log(
+    `Selected environment:  and Selected env file path: ${process.env.MONGO_URI}`,
+  );
+
+  dotenv.config();
 
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
