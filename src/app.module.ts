@@ -12,7 +12,7 @@ import { WebsiteModule } from './components/website/website.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: process.env.MONGO_URI || configService.get<string>('MONGO_URI'),
+        uri: configService.get<string>('MONGO_URI'),
       }),
       inject: [ConfigService],
     }),
