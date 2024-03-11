@@ -11,14 +11,14 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   dotenv.config();
-  logger.log(
-    `Selected environment:  and Selected env file path: ${process.env.MONGO_URI}`,
-  );
 
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
 
   const configService = app.get(ConfigService);
+  logger.log(
+    `MongoURI: ${configService.get<string>('MONGO_URI')}`,
+  );
   app.enableCors();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
