@@ -9,6 +9,7 @@ import * as process from 'process';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
+  logger.log(`Mongo Uri: ${process.env.MONGO_URI}`)
 
   dotenv.config();
 
@@ -16,9 +17,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const configService = app.get(ConfigService);
-  logger.log(
-    `MongoURI: ${configService.get<string>('MONGO_URI')}`,
-  );
   app.enableCors();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
