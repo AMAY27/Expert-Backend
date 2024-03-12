@@ -9,7 +9,7 @@ import * as process from 'process';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
-  logger.log(`Mongo Uri: ${process.env.MONGO_URI}`)
+  logger.log(`Mongo Uri: ${process.env}`)
 
   dotenv.config();
 
