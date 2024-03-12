@@ -8,7 +8,9 @@ import { swaggerConfig } from './config/swagger.config';
 import * as process from 'process';
 
 async function bootstrap() {
-  dotenv.config(); 
+  const logger = new Logger('Bootstrap');
+
+  dotenv.config();
 
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
@@ -18,6 +20,8 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api-docs', app, document);
+  logger.debug("APP PORT: "+ configService.get<number>('APP_PORT'))
+  logger.debug("MONGO URI: "+ configService.get<string>('MONGO_URI'))
 
   await app.listen(process.env.PORT  || configService.get<number>('APP_PORT'));
 }
