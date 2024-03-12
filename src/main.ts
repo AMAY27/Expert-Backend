@@ -8,10 +8,7 @@ import { swaggerConfig } from './config/swagger.config';
 import * as process from 'process';
 
 async function bootstrap() {
-  const logger = new Logger('Bootstrap');
-  logger.log(`Mongo Uri: ${process.env}`)
-
-  dotenv.config();
+  dotenv.config(); 
 
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
