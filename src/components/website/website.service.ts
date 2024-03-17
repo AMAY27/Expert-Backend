@@ -110,7 +110,7 @@ export class WebsiteService {
         .sort({ createdAt: -1 })
         .exec();
     }
-
+    console.log(websites);
     return await Promise.all(
       websites.map(async (website: Website) => {
         return await this.websiteConverter.convertToWebsiteResponseDto(website);
