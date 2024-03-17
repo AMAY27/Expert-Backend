@@ -104,7 +104,8 @@ export class WebsiteService {
     } else if (user.role === UserType.Expert) {
       websites = await this.websiteModel
         .find({
-          expertIds: userId,
+          //expertIds: userId,
+          userId
         })
         .sort({ createdAt: -1 })
         .exec();
