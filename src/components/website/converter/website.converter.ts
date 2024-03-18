@@ -25,6 +25,12 @@ export class WebsiteConverter {
     return user.firstName + ' ' + user.lastName;
   }
 
+  private async getPatternDetailsOfParticularWebsite(websiteId: string) {
+    return await this.websiteValidation.getPatternForParticularWebsite(
+      websiteId,
+    );
+  }
+
   async fetchImageFromPattern(patternId: string) {
     const pattern = await this.websiteValidation.checkPatternExists(patternId);
     const bucketName = this.configService.get<string>('AWS_S3_BUCKET');
@@ -53,6 +59,12 @@ export class WebsiteConverter {
       };
     });
 
+    const patternList = await this.getPatternDetailsOfParticularWebsite(
+      website.id,
+    );
+    const patternResponseDto = await Promise.all(
+      patternList.map((pattern) => this.convertPatternToDto(pattern, true)),
+    );
     const expertDetails = await Promise.all(expertDetailsPromises);
     return {
       websiteId: website._id,
@@ -69,6 +81,7 @@ export class WebsiteConverter {
       expertDetails: expertDetails,
       primaryExpertId: website.primaryExpertId,
       certificationId: website.certificationId,
+      patternDetails: patternResponseDto,
     };
   }
 

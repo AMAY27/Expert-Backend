@@ -50,4 +50,8 @@ export class WebsiteValidation {
       throw new HttpException('Comment not found', HttpStatus.NOT_FOUND);
     }
   }
+
+  async getPatternForParticularWebsite(websiteId: string){
+    return this.patternModel.find({ websiteId }).exec(); 
+  }
 }

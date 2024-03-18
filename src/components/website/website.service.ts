@@ -93,6 +93,23 @@ export class WebsiteService {
     );
   }
 
+  async getAllWebsiteDetails(userId:string) {
+    const user = await this.websiteValidation.checkUserExists(userId);
+    let websites:Website[];
+    let patterns:Pattern[];
+    if(user){
+      websites = await this.websiteModel.find().sort({createdAt: -1})
+      patterns = await this.patternModel.find();
+    }
+    return await Promise.all(
+      websites.map(async (website: Website) => {
+        return {
+          website: await this.websiteConverter.convertToWebsiteResponseDto(website),
+        }
+      }),
+    );
+  }
+
   async getAllWebsiteDetailsForParticularUser(userId: string) {
     const user = await this.websiteValidation.checkUserExists(userId);
     let websites: Website[];
@@ -161,7 +178,6 @@ export class WebsiteService {
         Key: fileKey,
         Body: buffer,
       };
-
       await this.awsHelper.executePutObjectCommand(params);
       return fileKey;
     });

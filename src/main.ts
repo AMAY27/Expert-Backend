@@ -20,8 +20,6 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api-docs', app, document);
-  logger.debug("APP PORT: "+ configService.get<number>('APP_PORT'))
-  logger.debug("MONGO URI: "+ configService.get<string>('MONGO_URI'))
 
   await app.listen(process.env.PORT  || configService.get<number>('APP_PORT'));
 }
