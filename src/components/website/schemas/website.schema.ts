@@ -42,6 +42,12 @@ export class Website extends Document {
 
   @Prop({ unique: true, sparse: true })
   certificationId: string;
+
+  @Prop()
+  upVotes: string[];
+
+  @Prop()
+  downVotes: string[];
 }
 
 export const WebsiteSchema = SchemaFactory.createForClass(Website);

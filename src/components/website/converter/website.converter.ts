@@ -59,6 +59,8 @@ export class WebsiteConverter {
       };
     });
 
+    const primaryExpertName = await this.getUserName(website.primaryExpertId)
+
     const patternList = await this.getPatternDetailsOfParticularWebsite(
       website.id,
     );
@@ -80,8 +82,11 @@ export class WebsiteConverter {
       expertFeedback: website.expertFeedback,
       expertDetails: expertDetails,
       primaryExpertId: website.primaryExpertId,
+      contributorName: primaryExpertName,
       certificationId: website.certificationId,
       patternDetails: patternResponseDto,
+      upVotes: website.upVotes,
+      downVotes: website.downVotes
     };
   }
 

@@ -73,19 +73,31 @@ export class WebsiteController {
     return await this.websiteService.fetchParticularWebsiteDetails(websiteId);
   }
 
+  // @Get()
+  // @UseGuards(AuthGuard)
+  // @Roles(UserType.Client, UserType.Expert)
+  // @ApiOperation({
+  //   summary: 'Get all websites for a user [For Client/Expert]',
+  //   description:
+  //     'Retrieve details of all websites associated with a specific user(Client or Expert).',
+  // })
+  // async getAllWebsiteDetailsForParticularUser(@Query('userId') userId: string) {
+  //   this.logger.log(`Fetch all website details for user with id: ${userId}`);
+  //   return await this.websiteService.getAllWebsiteDetailsForParticularUser(
+  //     userId,
+  //   );
+  // }
+
   @Get()
   @UseGuards(AuthGuard)
   @Roles(UserType.Client, UserType.Expert)
   @ApiOperation({
-    summary: 'Get all websites for a user [For Client/Expert]',
+    summary: 'Get all websites',
     description:
-      'Retrieve details of all websites associated with a specific user(Client or Expert).',
+      'Retrieve details of all websites.',
   })
-  async getAllWebsiteDetailsForParticularUser(@Query('userId') userId: string) {
-    this.logger.log(`Fetch all website details for user with id: ${userId}`);
-    return await this.websiteService.getAllWebsiteDetailsForParticularUser(
-      userId,
-    );
+  async getAllWebsiteDetails(@Query('userId') userId: string){
+    return await this.websiteService.getAllWebsiteDetails(userId);
   }
 
   @Get(':userType/details')
@@ -231,6 +243,23 @@ export class WebsiteController {
       patternId,
       commentId,
       replyCreateDto,
+    );
+  }
+
+  @Post(':websiteId/user/:userId/upVote')
+  @UseGuards(AuthGuard)
+  @Roles(UserType.Expert)
+  @ApiOperation({
+    summary: 'Add upVote to a website [For Expert]',
+    description: 'Add upVote by the user name to the website upVotes',
+  })
+  async addUpVote(
+    @Param('websiteId') websiteId: string,
+    @Param('userId') userId: string
+  ) {
+    return await this.websiteService.addUpVoteToWebsite(
+      websiteId,
+      userId
     );
   }
 

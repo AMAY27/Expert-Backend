@@ -15,9 +15,12 @@ export class WebsiteResponseDto {
   expertFeedback: string;
   expertDetails: ExpertDetailsDto[];
   primaryExpertId: string;
+  contributorName: string;
   createdAt: Date;
   certificationId: string;
   patternDetails: PatternResponseDto[];
+  upVotes: string[];
+  downVotes: string[];
 }
 
 export class ExpertDetailsDto {

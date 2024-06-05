@@ -103,9 +103,7 @@ export class WebsiteService {
     }
     return await Promise.all(
       websites.map(async (website: Website) => {
-        return {
-          website: await this.websiteConverter.convertToWebsiteResponseDto(website),
-        }
+        return await this.websiteConverter.convertToWebsiteResponseDto(website);
       }),
     );
   }
@@ -423,6 +421,31 @@ export class WebsiteService {
       this.logger.error(`Error while adding comment: ${error.message}`);
       throw new HttpException(
         'Failed to add comment',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async addUpVoteToWebsite(
+    websiteId: string,
+    userId: string,
+  ){
+    await this.websiteValidation.checkWebsiteExists(websiteId);
+    const user = await this.websiteValidation.checkUserExists(userId);
+    const userName = user.firstName + ' ' + user.lastName;
+
+    try {
+      const website = await this.websiteModel.findByIdAndUpdate(
+        websiteId,
+        { $push: {upVotes: userName} },
+        {new : true}
+      )
+      this.logger.log(website)
+      return {websiteUpvotes: website.upVotes, websiteId : website._id};
+    } catch (error) {
+      this.logger.error(`Error while adding the upvote: ${error.message}`);
+      throw new HttpException(
+        'Failed to upVote',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
