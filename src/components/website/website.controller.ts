@@ -250,7 +250,7 @@ export class WebsiteController {
   @UseGuards(AuthGuard)
   @Roles(UserType.Expert)
   @ApiOperation({
-    summary: 'Add upVote to a website [For Expert]',
+    summary: 'Add upVote to a website',
     description: 'Add upVote by the user name to the website upVotes',
   })
   async addUpVote(
@@ -258,6 +258,23 @@ export class WebsiteController {
     @Param('userId') userId: string
   ) {
     return await this.websiteService.addUpVoteToWebsite(
+      websiteId,
+      userId
+    );
+  }
+
+  @Post(':websiteId/user/:userId/downVote')
+  @UseGuards(AuthGuard)
+  @Roles(UserType.Expert)
+  @ApiOperation({
+    summary: 'Add downVote to a website',
+    description: 'Add downVote by the user name to the website upVotes',
+  })
+  async addDownVote(
+    @Param('websiteId') websiteId: string,
+    @Param('userId') userId: string
+  ) {
+    return await this.websiteService.addDownVoteToWebsite(
       websiteId,
       userId
     );

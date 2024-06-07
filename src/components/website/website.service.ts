@@ -435,13 +435,50 @@ export class WebsiteService {
     const userName = user.firstName + ' ' + user.lastName;
 
     try {
-      const website = await this.websiteModel.findByIdAndUpdate(
+      const website = await this.websiteModel.findById(
         websiteId,
-        { $push: {upVotes: userName} },
-        {new : true}
       )
+      if (!website) {
+        throw new HttpException('Website not found', HttpStatus.NOT_FOUND);
+      }
+      if(website.downVotes.includes(userName)){
+        website.downVotes = website.downVotes.filter(name=>name!==userName)
+      }
+      website.upVotes.includes(userName) ? website.upVotes = website.upVotes.filter(name => name !== userName) : website.upVotes.push(userName);
+      await website.save();
       this.logger.log(website)
-      return {websiteUpvotes: website.upVotes, websiteId : website._id};
+      return {websiteUpvotes: website.upVotes, websiteDownvotes: website.downVotes, websiteId : website._id};
+    } catch (error) {
+      this.logger.error(`Error while adding the upvote: ${error.message}`);
+      throw new HttpException(
+        'Failed to upVote',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async addDownVoteToWebsite(
+    websiteId: string,
+    userId: string,
+  ){
+    await this.websiteValidation.checkWebsiteExists(websiteId);
+    const user = await this.websiteValidation.checkUserExists(userId);
+    const userName = user.firstName + ' ' + user.lastName;
+
+    try {
+      const website = await this.websiteModel.findById(
+        websiteId,
+      )
+      if (!website) {
+        throw new HttpException('Website not found', HttpStatus.NOT_FOUND);
+      }
+      if(website.upVotes.includes(userName)){
+        website.upVotes = website.upVotes.filter(name => name !== userName);
+      }
+      website.downVotes.includes(userName) ? website.downVotes = website.downVotes.filter(name => name !== userName) : website.downVotes.push(userName);
+      await website.save();
+      this.logger.log(website)
+      return {websiteDownvotes: website.downVotes, websiteUpvotes: website.upVotes, websiteId : website._id};
     } catch (error) {
       this.logger.error(`Error while adding the upvote: ${error.message}`);
       throw new HttpException(
