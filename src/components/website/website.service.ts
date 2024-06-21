@@ -40,6 +40,7 @@ export class WebsiteService {
   ) {}
 
   async persistWebsiteDetails(websiteCreateDto: WebsiteCreateDto) {
+
     await this.websiteValidation.checkUserExists(websiteCreateDto.userId);
 
     try {
@@ -215,12 +216,12 @@ export class WebsiteService {
     );
     const website = await this.websiteValidation.checkWebsiteExists(websiteId);
 
-    if (!website.expertIds.includes(patternCreateDto.createdByExpertId)) {
-      throw new HttpException(
-        'Expert not assigned to the website',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    // if (!website.expertIds.includes(patternCreateDto.createdByExpertId)) {
+    //   throw new HttpException(
+    //     'Expert not assigned to the website',
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
 
     const verifications = website.expertIds.map((expertId) => ({
       expertId: expertId,
