@@ -167,6 +167,7 @@ export class WebsiteService {
   async addImagesInPattern(patternId: string, files: any) {
     const pattern = await this.websiteValidation.checkPatternExists(patternId);
     const bucketName = this.configService.get<string>('AWS_S3_BUCKET');
+    const website = await this.websiteValidation.checkWebsiteExists(pattern.websiteId);
 
     const uploadPromises = files.map(async (file) => {
       const { originalname, buffer } = file;
@@ -185,7 +186,8 @@ export class WebsiteService {
       const patternImageKeys = await Promise.all(uploadPromises);
       pattern.patternImageKeys.push(...patternImageKeys);
       await pattern.save();
-      return { message: 'Images added successfully' };
+      this.logger.log(website);
+      return { message: 'Images added successfully' , website : await this.websiteConverter.convertToWebsiteResponseDto(website)};
     } catch (error) {
       this.logger.error(
         `Error while adding images in pattern : ${error.message}`,
@@ -239,7 +241,7 @@ export class WebsiteService {
     });
     try {
       await newPattern.save();
-      return { patternId: newPattern._id };
+      return { patternId: newPattern._id};
     } catch (error) {
       this.logger.error(
         `Error while adding pattern in website: ${error.message}`,
@@ -399,8 +401,8 @@ export class WebsiteService {
     commentCreateDto: CommentCreateDto,
   ) {
     await this.websiteValidation.checkUserExists(commentCreateDto.expertId);
-    await this.websiteValidation.checkWebsiteExists(websiteId);
-    await this.websiteValidation.checkPatternExists(patternId);
+    const website = await this.websiteValidation.checkWebsiteExists(websiteId);
+    const pattern = await this.websiteValidation.checkPatternExists(patternId);
 
     const newComment = new this.commentModel({
       ...commentCreateDto,
@@ -417,7 +419,7 @@ export class WebsiteService {
         { new: true },
       );
 
-      return { commentId: savedComment._id };
+      return { commentId: savedComment._id, website: await this.websiteConverter.convertToWebsiteResponseDto(website), pattern: await this.websiteConverter.convertPatternToDto(pattern,true)};
     } catch (error) {
       this.logger.error(`Error while adding comment: ${error.message}`);
       throw new HttpException(
